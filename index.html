@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>気持ちを伝えるAI</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f3f3f3;
+      padding: 30px;
+      max-width: 600px;
+      margin: auto;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00c300;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>あなたの気持ち、伝わる言葉に整えます。</h1>
+  <p>伝えたい気持ちを、自由に書いてください。</p>
+
+  <textarea id="userInput" rows="8" placeholder="例：毎日ありがとうって思ってるけど、面と向かって言えなくて…"></textarea>
+
+  <button onclick="generateMessage()">整えてもらう</button>
+
+  <div id="result" style="display:none;">
+    <h3>整えたメッセージ：</h3>
+    <p id="outputText"></p>
+  </div>
+
+  <script>
+    async function generateMessage() {
+      const input = document.getElementById("userInput").value;
+
+      if (!input) return;
+
+      document.getElementById("outputText").textContent = "考え中…";
+      document.getElementById("result").style.display = "block";
+
+      try {
+        const response = await fetch("http://localhost:3000/api/message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: input })
+        });
+
+        const data = await response.json();
+        document.getElementById("outputText").textContent = data.result;
+      } catch (error) {
+        document.getElementById("outputText").textContent = "エラーが発生しました。";
+        console.error(error);
+      }
+    }
+  </script>
+
+</body>
+</html>
