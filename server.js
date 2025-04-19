@@ -7,7 +7,3 @@ app.post('/api/message', async (req, res) => {  const userInput = req.body.text
     const aiMessage = chatCompletion.choices[0].message.content;    res.json({ result: aiMessage });
   } catch (error) {    console.error("エラー:", error);    res.status(500).json({ error: "APIエラーが発生しました" });  }});
 app.listen(3000, () => {  console.log('サーバーが http://localhost:3000 で起動しました');});
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`サーバー起動: ポート ${PORT}`);
-});
